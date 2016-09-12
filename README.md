@@ -1,11 +1,3 @@
-[招聘] 与我一起工作
-=========
-> ［北京地区］国内最大美股券商 － [老虎证券](https://www.tigerbrokers.com)   
-［地点］东三环亮马桥  
-［职位］web前端开发工程师  
-［要求］无。实习全职都可以。只求和我面基，看对眼  
-［联系］我的github主页上邮箱 [qiqiboy](https://github.com/qiqiboy)
-
 pageSwitch
 =========
 > **与 [TouchSlider.js](https://github.com/qiqiboy/touchslider) 的区别**  
@@ -222,3 +214,42 @@ $(container_id).ps().next(); //由于链式调用返回依然是jq对象自身�
 http://u.boy.im/pageswitch  
 
 http://u.boy.im/pageswitch/pic.html  
+
+
+## 修改 于 2016.09.12
+
+### 当前页面添加current类名
+
+### 使用修改
+在某个页面里长内容滚动时，可这样写
+```javascript
+pw.on('after',function(e){
+    if(e ===1 ){
+        //到达长页面时停止pageSwitch
+        pw.freeze(true);
+        //然后在该页面定义touch事件
+        var scrolly = 0, delty = 0;
+        document.addEventListener('touchstart',function(ev){
+            ev.preventDefault();
+            var touch  = ev.touches ? ev.touches[0] : ev;
+            scrolly = touch.pageY;
+        });
+        document.addEventListener('touchmove',function(ev){
+            ev.preventDefault();
+            var touch  = ev.touches ? ev.touches[0] : ev;
+            delty += touch.pageY - scrolly;
+            document.querySelector('.inner').style.webkitTransform = 'translateY('+delty+'px)';
+        });
+    }
+}
+```
+
+### 添加 Animate.css 
+在页面开始添加 pwAnimateCache();
+在 pageSwitch 初始化后 pwAnimate(pw);
+在 pageSwitch 的 after 事件里面添加 
+```javascipt
+pw.on('after',function(){
+	pwAnimate(pw);
+});
+```
