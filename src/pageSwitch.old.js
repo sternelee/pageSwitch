@@ -2,47 +2,30 @@
  * pageSwitch
  * @author qiqiboy
  * @github https://github.com/qiqiboy/pageSwitch
- * @author sternelee 修改
- * 增加当前标签 current
- * @github https://sternelee.github.io/pageSwitch
  */
 ;
-(function (factory) {
-    var root = (typeof self == 'object' && self.self == self && self) ||
-        (typeof global == 'object' && global.global == global && global);
-
-    if (typeof define === 'function' && define.amd) {
-        define(['exports'], function (exports) {
-            root.pageSwitch = factory(root, exports);
-        });
-    } else if (typeof exports !== 'undefined') {
-        factory(root, exports);
-    } else {
-        root.pageSwitch = factory(root, {});
-    }
-
-}(function(root, pageSwitch){
+(function(ROOT, struct, undefined){
     "use strict";
     
-    var VERSION='3.1.9';
+    var VERSION='2.3.2';
     var lastTime=0,
-        nextFrame=window.requestAnimationFrame            ||
-                window.webkitRequestAnimationFrame        ||
-                window.mozRequestAnimationFrame           ||
-                window.msRequestAnimationFrame            ||
+        nextFrame=ROOT.requestAnimationFrame            ||
+                ROOT.webkitRequestAnimationFrame        ||
+                ROOT.mozRequestAnimationFrame           ||
+                ROOT.msRequestAnimationFrame            ||
                 function(callback){
                     var currTime=+new Date,
                         delay=Math.max(1000/60,1000/60-(currTime-lastTime));
                     lastTime=currTime+delay;
                     return setTimeout(callback,delay);
                 },
-        cancelFrame=window.cancelAnimationFrame           ||
-                window.webkitCancelAnimationFrame         ||
-                window.webkitCancelRequestAnimationFrame  ||
-                window.mozCancelRequestAnimationFrame     ||
-                window.msCancelRequestAnimationFrame      ||
+        cancelFrame=ROOT.cancelAnimationFrame           ||
+                ROOT.webkitCancelAnimationFrame         ||
+                ROOT.webkitCancelRequestAnimationFrame  ||
+                ROOT.mozCancelRequestAnimationFrame     ||
+                ROOT.msCancelRequestAnimationFrame      ||
                 clearTimeout,
-        DOC=window.document,
+        DOC=ROOT.document,
         divstyle=DOC.createElement('div').style,
         cssVendor=function(){
             var tests="-webkit- -moz- -o- -ms-".split(" "),
@@ -516,7 +499,7 @@
         return typeof obj=='object'||typeof obj=='function' ? class2type[toString.call(obj)]||"object" :
             typeof obj;
     }
-    
+	
     function isArrayLike(elem){
         var tp=type(elem);
         return !!elem && tp!='function' && tp!='string' && (elem.length===0 || elem.length && (elem.nodeType==1 || (elem.length-1) in elem));
@@ -596,7 +579,7 @@
     }
 
     function getStyle(elem,prop){
-        var style=window.getComputedStyle&&window.getComputedStyle(elem,null)||elem.currentStyle||elem.style;
+        var style=ROOT.getComputedStyle&&ROOT.getComputedStyle(elem,null)||elem.currentStyle||elem.style;
         return style[prop];
     }
 
@@ -632,7 +615,7 @@
 
     function removeRange(){
         var range;
-        if(window.getSelection){
+        if(ROOT.getSelection){
             range=getSelection();
             if('empty' in range)range.empty();
             else if('removeAllRanges' in range)range.removeAllRanges();
@@ -692,21 +675,15 @@
         return ev;
     }
     
-    pageSwitch = function(){
-        this.container=typeof arguments[0]=='string'?document.getElementById(arguments[0]):arguments[0];
-        this.init(arguments[1] || {});
-    };
-
-    pageSwitch.prototype={
+    struct.prototype={
         version:VERSION,
-        constructor:pageSwitch,
+        constructor:struct,
         latestTime:0,
-        
         init:function(config){
             var self=this,
                 handler=this.handler=function(ev){
                     !self.frozen && self.handleEvent(ev);
-                };
+                }
 
             this.events={};
             this.duration=isNaN(parseInt(config.duration))?600:parseInt(config.duration);
@@ -715,7 +692,6 @@
             this.loop=!!config.loop;
             this.mouse=config.mouse==null?true:!!config.mouse;
             this.mousewheel=!!config.mousewheel;
-            this.internalrolling = !!config.internalrolling;
             this.interval=parseInt(config.interval)||5000;
             this.playing=!!config.autoplay;
             this.arrowkey=!!config.arrowkey;
@@ -744,7 +720,7 @@
                 update:null
             }).firePlay();
 
-            this.comment=document.createComment(' Powered by pageSwitch v'+this.version+'  https://github.com/sternelee/pageSwitch ');
+            this.comment=document.createComment(' Powered by pageSwitch v'+this.version+'  https://github.com/qiqiboy/pageSwitch ');
             this.container.appendChild(this.comment);
 
             this.setEase(config.ease);
@@ -870,11 +846,6 @@
         },
         firePlay:function(){
             var self=this;
-            each(self.pages,function(page){
-                var pcn=page.className.replace(/\s+current/g,"");
-                page.className=pcn;
-            });
-            self.pages[self.current].className +=' current';
             if(this.playing){
                 this.playTimer=setTimeout(function(){
                     self.slide((self.current+1)%(self.loop?Infinity:self.length));
@@ -1108,10 +1079,20 @@
     }
     
     each("Ease Transition".split(" "),function(name){
-        pageSwitch['add'+name]=pageSwitch.prototype['add'+name];
+        struct['add'+name]=struct.prototype['add'+name];
     });
 
-
-    return pageSwitch;
+    if(typeof define=='function' && define.amd){
+        define('pageSwitch',function(){
+            return struct;
+        });
+    }else ROOT.pageSwitch=struct;
+	
+})(window, function(wrap,config){
+    if(!(this instanceof arguments.callee)){
+        return new arguments.callee(wrap,config);
+    }
     
-}));
+    this.container=typeof wrap=='string'?document.getElementById(wrap):wrap;
+    this.init(config||{});
+});
