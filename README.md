@@ -73,7 +73,7 @@ pw.destroy();				//销毁pageSwitch效果对象
  * dragEnd 结束拖拽
  */
 pw.on(event,callback);
-````
+```
 
 ## setEase 示例
 
@@ -89,7 +89,7 @@ pw.setEase('linear'); //由于内置了linear支持，所以可以直接使用
 pw.setEase(function(t,b,c,d){
 	return c*t/d + b;
 });
-````
+```
 
 更多曲线函数参见：https://github.com/zhangxinxu/Tween/blob/master/tween.js
 
@@ -182,7 +182,7 @@ pw.setTransition(function(cpage,cp,tpage,tp){
 	$(cpage).css('opacity',1-Math.abs(cp));
 	$(tpage).css('opacity',Math.abs(cp));
 });
-````
+```
 
 ## jQuery/Zepto适配器
 ```javascript
@@ -205,7 +205,7 @@ $(container_id).pageSwitch({
 
 $(container_id).ps().next(); //由于链式调用返回依然是jq对象自身，所以如果需要使用pageSwitch对象方法，需要通过 `.ps()` 方法获取对pageSwitch对象的引用。
 
-````
+```
 
 ## 兼容性
 兼容全平台，包括IE6+
@@ -216,37 +216,24 @@ http://u.boy.im/pageswitch
 http://u.boy.im/pageswitch/pic.html  
 
 
+
 ## 修改 于 2016.09.12
 
 ### 当前页面添加current类名
 
 ### 使用修改
-在某个页面里长内容滚动时，可这样写
-```javascript
-pw.on('after',function(e){
-    if(e ===1 ){
-        //到达长页面时停止pageSwitch
-        pw.freeze(true);
-        //然后在该页面定义touch事件
-        var scrolly = 0, delty = 0;
-        document.addEventListener('touchstart',function(ev){
-            ev.preventDefault();
-            var touch  = ev.touches ? ev.touches[0] : ev;
-            scrolly = touch.pageY;
-        });
-        document.addEventListener('touchmove',function(ev){
-            ev.preventDefault();
-            var touch  = ev.touches ? ev.touches[0] : ev;
-            delty += touch.pageY - scrolly;
-            document.querySelector('.inner').style.webkitTransform = 'translateY('+delty+'px)';
-        });
-    }
-}
-```
+在某个页面里有长内容滚动时，可这样写(scroll.html)
+
 
 ### 添加 Animate.css 
-在页面开始添加 pwAnimateCache();
-在 pageSwitch 初始化后 pwAnimate(pw);
+在页面开始添加 
+```javascript
+pwAnimateCache();
+```
+在 pageSwitch 初始化后 
+```javascript
+pwAnimate(pw);
+```
 在 pageSwitch 的 after 事件里面添加 
 ```javascipt
 pw.on('after',function(){
