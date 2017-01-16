@@ -160,17 +160,6 @@
                 transform?tpage.style[transform]='translate'+prop+'('+tp*100+'%)'+fire3D:tpage.style[XY[prop]]=tp*100+'%';
             }
         }
-        TRANSITION['scrollClock'+name]=function(cpage,cp,tpage,tp){
-            var prop=name||['X','Y'][this.direction],
-            origin=['0','50%'][prop=='X'?'slice':'reverse']().join(' ');
-            
-            cpage.style[transformOrigin] = origin;
-            transform?cpage.style[transform]='rotate(' + -cp*30+'deg)'+fire3D:cpage.style[XY[prop]]=cp*30+'%';
-            if(tpage){
-                tpage.style[transformOrigin] = origin;
-                transform?tpage.style[transform]='rotate('+ -tp*30+'deg)'+fire3D:tpage.style[XY[prop]]=tp*30+'%';
-            }
-        }
 
         TRANSITION['scroll3d'+name]=function(cpage,cp,tpage,tp){
             var prop=name||['X','Y'][this.direction],
@@ -345,69 +334,6 @@
                         tpage.parentNode.style.zIndex=tpage._clone.parentNode.style.zIndex=1-zIndex;
                         tpage.parentNode.style[transform]='perspective(1000px) rotate'+prop+'('+m+'deg)';
                         tpage._clone.parentNode.style[transform]='perspective(1000px) rotate'+prop+'('+n+'deg)';
-                    }
-
-                    fixBlock(cpage,tpage,this.pages,this.container);
-
-                    if(0==cp||tp==0){
-                        cpage=this.pages[this.current];
-                        cpage.style.height=cpage.style.width=cpage.parentNode.style.height=cpage.parentNode.style.width='100%';
-                        cpage.style.top=cpage.style.left=cpage.parentNode.style.top=cpage.parentNode.style.left=0;
-                        cpage.parentNode.style.zIndex=2;
-                    }
-                }else TRANSITION['scroll'+name].apply(this,arguments);
-            }
-        }();
-        TRANSITION['flipSpin'+name]=function(){
-            var createWrap=function(node,container,prop,off){
-                    var wrap=node.parentNode,
-                        len=prop=='X'?'height':'width',
-                        pos=prop=='X'?'top':'left',
-                        origin=['50%',(off?0:100)+'%'][prop=='X'?'slice':'reverse']().join(' ');
-
-                    if(!wrap||wrap==container){
-                        wrap=DOC.createElement('div');
-                        wrap.style.cssText='position:absolute;top:0;left:0;height:100%;width:100%;overflow:hidden;display:block;';
-                        wrap.style[transformOrigin]=origin;
-                        wrap.style[backfaceVisibility]='hidden';
-                        wrap.appendChild(node);
-                        container.appendChild(wrap);
-                    }
-
-                    wrap.style[len]='100%';
-                    wrap.style[pos]='0';
-                    node.style[len]='100%';
-                    node.style[pos]='0';
-
-                    return wrap;
-                },
-                fixBlock=function(cpage,tpage,pages,container){
-                    each(pages,function(page){
-                        if(page.parentNode==container)return;
-                        if(cpage!=page && tpage!=page){
-                            page.parentNode.style.display=='none';
-                        }else{
-                            page.parentNode.style.display=='block';
-                        }
-                    });
-                };
-
-            return function(cpage,cp,tpage,tp){
-                var prop=name||['X','Y'][1-this.direction],
-                    isSelf=this.pages[this.current]==cpage,
-                    zIndex=Number(Math.abs(cp)<.5),
-                    fix=prop=='X'?1:-1,
-                    m,n;
-                if(perspective){
-                    createWrap(cpage,this.container,prop,.5);
-                    m=n=-cp*180*fix;
-                    cpage.parentNode.style.zIndex=zIndex;
-                    cpage.parentNode.style[transform]='perspective(1000px) rotate'+prop+'('+n+'deg)';
-                    if(tpage){
-                        createWrap(tpage,this.container,prop,.5);
-                        m=n=-tp*180*fix;
-                        tpage.parentNode.style.zIndex=1-zIndex;
-                        tpage.parentNode.style[transform]='perspective(1000px) rotate'+prop+'('+m+'deg)';
                     }
 
                     fixBlock(cpage,tpage,this.pages,this.container);

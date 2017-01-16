@@ -103,7 +103,8 @@ pw.setEase(function(t,b,c,d){
   
 `scroll`			页面滚动 | [demo](http://u.boy.im/pageswitch/pic.html?ts=scroll)  
 `scroll3d`			3d页面滚动 | [demo](http://u.boy.im/pageswitch/pic.html?ts=scroll3d)  
-`scrollCover`		页面视差滚入滚出（前后页面速度不一致） | [demo](http://u.boy.im/pageswitch/pic.html?ts=scrollCover)  
+`scrollClock`		页面圆盘转动 | [demo](http://u.boy.im/pageswitch/pic.html?ts=scrollClock)  
+`scrollCover`       页面视差滚入滚出（前后页面速度不一致） | [demo](http://u.boy.im/pageswitch/pic.html?ts=scrollCover)  
 `scrollCoverReverse`同上反向 | [demo](http://u.boy.im/pageswitch/pic.html?ts=scrollCoverReverse)    
 `scrollCoverIn`  	总是下一张页面视差滚入 | [demo](http://u.boy.im/pageswitch/pic.html?ts=scrollCoverIn)   
 `scrollCoverOut` 	总是当前页面视差滚出 | [demo](http://u.boy.im/pageswitch/pic.html?ts=scrollCoverOut)     
@@ -135,6 +136,7 @@ pw.setEase(function(t,b,c,d){
 `flip`				翻转切换 | [demo](http://u.boy.im/pageswitch/pic.html?ts=flip)   
 `flip3d`			3d翻转切换 | [demo](http://u.boy.im/pageswitch/pic.html?ts=flip3d)   
 `flipClock`			翻页钟效果 | [demo](http://u.boy.im/pageswitch/pic.html?ts=flipClock)   
+`flipSpin`          翻书页效果 | [demo](http://u.boy.im/pageswitch/pic.html?ts=flipSpin)  
 `flipPaper`			翻书本效果 | [demo](http://u.boy.im/pageswitch/pic.html?ts=flipPaper)   
 `flipCover`			页面翻入翻出 | [demo](http://u.boy.im/pageswitch/pic.html?ts=flipCover)   
 `flipCoverReverse`	同上反向 | [demo](http://u.boy.im/pageswitch/pic.html?ts=flipCoverReverse)    
@@ -159,9 +161,9 @@ pw.setTransition('fade'); //由于内置了fade效果，所以可以直接调用
 pw.setTransition(function(cpage,cp,tpage,tp){
 	/* 过渡效果处理函数
      * @param HTMLElement cpage 参与动画的前序页面
-     * @param Float cp 目标页面过渡比率，取值范围-1到1
+     * @param Float cp 目标页面过渡比率，取值范围向前为0到-1，向后为0到1
      * @param HTMLElement tpage 参与动画的后序页面；如果非循环loop模式，则在切换到边缘页面时可能不存在该参数
-     * @param Float tp 目标页面过渡比率，取值范围-1到1；如果非循环loop模式，则在切换到边缘页面时可能不存在该参数
+     * @param Float tp 目标页面过渡比率，取值范围向前为1到0，向后为-1到0；如果非循环loop模式，则在切换到边缘页面时可能不存在该参数
      */
 	 
 	if('opacity' in cpage.style){
